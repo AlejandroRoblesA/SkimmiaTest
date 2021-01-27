@@ -17,6 +17,9 @@ extension Profile: UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scrollView.delegate = self
+        userNameTextField.delegate = self
+        lastNameTextField.delegate = self
         setupNavigationBar()
         setupConstraints()
         scrollView.setupKeyboard()
@@ -38,6 +41,7 @@ extension Profile: UIScrollViewDelegate {
         if (userNameTextField.text != ""){
             if (lastNameTextField.text != ""){
                 if(biographyTextView.text != ""){
+                    alert(title: "", message: "Su información se ha gurdado de forma correcta.")
                     return true
                 }
                 else{
@@ -63,6 +67,7 @@ extension Profile: UIScrollViewDelegate {
     }
     
     @objc func handleSave(){
+        dismissKeyboard()
         if (fieldsValidation()){
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             let form = Form(context: context)
@@ -110,6 +115,14 @@ extension Profile: UIScrollViewDelegate {
         }
     }
 }
+
+extension Profile: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 
 //MARK: - UIImagePicker
 extension Profile: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
